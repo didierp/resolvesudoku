@@ -376,7 +376,8 @@ class MyFonctionsTest extends TestCase {
 	 *           ["----8--7--9-2--13---2-13945--9--27---8-7--69---5------3-7----29---------1-842----", "513984276694257138872613945469832751281745693735196482347561829926378514158429367"]
 	 */
 	public function testGetRes($grid, $expectedRes) {
-		$res = MyFonctions::getRes($grid);
+		$my = new Grid($grid);
+		$res = $my->getRes();;
 		$this->assertEquals($expectedRes, $res);
 	}
 
