@@ -96,9 +96,9 @@ class Grid {
 			echo "$this->res\n";
 			if ($this->previousRes == $this->res) {
 				$this->countOld = 0;
-				$keyPos = $this->getKeyPos();
-				if ($keyPos !== null) {
-					$this->initChoice($keyPos);
+				$bestOffset = $this->getBestOffset();
+				if ($bestOffset !== null) {
+					$this->initChoice($bestOffset);
 				}
 			} else {
 				$this->searchUniqueSolution();
@@ -117,23 +117,23 @@ class Grid {
 		return $this->res;
 	}
 
-	private function getKeyPos() {
-		$keyPos = null;
-		foreach ($this->pos as $key => $value) {
+	private function getBestOffset() {
+		$bestOffset = null;
+		foreach ($this->pos as $offset => $value) {
 			if (count($value) == 2) {
-				$keyPos = $key;
+				$bestOffset = $offset;
 				break;
 			} else {
 				$this->countPos = count($value);
 				if ($this->countPos > 0 && $this->countPos < $this->countOld) {
-					$keyPos = $key;
+					$bestOffset = $offset;
 				}
 			}
 			$this->countOld = count($value);
 		}
 		$this->countChoicedValue++;
 
-		return $keyPos;
+		return $bestOffset;
 	}
 
 	private function initChoice($keyPos) {
