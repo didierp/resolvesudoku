@@ -172,35 +172,31 @@ class Grid {
 	}
 
 	private function searchUniqueSolution() {
+		$tabRef = range(1, 9);
 		$this->previousRes = $this->res;
 		$this->pos = [];
 		$firstPos = strpos($this->res, '-');
-		$lastPos = strrpos($this->res, '-');
-		for ($offsetCar = $firstPos; $offsetCar <= $lastPos; $offsetCar++) {
-			if (substr($this->res, $offsetCar, 1) == '-') {
-				$this->pos[$offsetCar] = [];
-				for ($val = 1; $val <= 9; $val++) {
-					$l = MyFunctions::getLineFromOffset($offsetCar);
-					if (!in_array($val, $this->lines[$l])) {
-						$c = MyFunctions::getColumnFromOffset($offsetCar);
-						$s = MyFunctions::getSquare($l, $c);
-						if (!in_array($val, $this->squares[$s])) {
-							if (!in_array($val, $this->columns[$c])) {
-								$this->pos[$offsetCar][] = $val;
-								$this->countFoundValue++;
-							}
-						}
-					}
-				}
-				if (count($this->pos[$offsetCar]) == 1 && $this->pos[$offsetCar][0] !== null) {
-					$this->countUniqueValue++;
-					$this->setResForUniqueChoice($offsetCar, $this->pos[$offsetCar][0]);
-					$this->setGridForUniqueChoices($l, $c, $s, $this->pos[$offsetCar][0]);
-				} elseif (count($this->pos[$offsetCar]) == 0) {
-					$this->countNoValue++;
-					$this->returnPreviousChoice();
-					break;
-				}
+		do {
+			$offsets[] = $firstPos;
+			$offset = $firstPos + 1;
+			$firstPos = strpos($this->res, '-', $offset);
+		} while ($firstPos !== false);
+		foreach ($offsets as $offsetCar) {
+			$this->pos[$offsetCar] = [];
+			$l = MyFunctions::getLineFromOffset($offsetCar);
+			$c = MyFunctions::getColumnFromOffset($offsetCar);
+			$s = MyFunctions::getSquare($l, $c);
+			$diff = array_diff($tabRef, $this->lines[$l], $this->squares[$s], $this->columns[$c]);
+			sort($diff);
+			$this->pos[$offsetCar] = $diff;
+			if (count($this->pos[$offsetCar]) == 1 && $this->pos[$offsetCar][0] !== null) {
+				$this->countUniqueValue++;
+				$this->setResForUniqueChoice($offsetCar, $this->pos[$offsetCar][0]);
+				$this->setGridForUniqueChoices($l, $c, $s, $this->pos[$offsetCar][0]);
+			} elseif (count($this->pos[$offsetCar]) == 0) {
+				$this->countNoValue++;
+				$this->returnPreviousChoice();
+				break;
 			}
 		}
 	}
