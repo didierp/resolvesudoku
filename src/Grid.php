@@ -20,7 +20,7 @@ class Grid {
 	/**
 	 * @var string
 	 */
-	public $old = "";
+	public $previousRes = "";
 	/**
 	 * @var array
 	 */
@@ -62,10 +62,6 @@ class Grid {
 	 */
 	public $pos;
 	/**
-	 * @var int|null
-	 */
-	private $keyPos;
-	/**
 	 * @var int
 	 */
 	private $countNoValue = 0;
@@ -97,11 +93,11 @@ class Grid {
 				break;
 			}
 			echo "$this->res\n";
-			if ($this->old == $this->res) {
+			if ($this->previousRes == $this->res) {
 				$this->countOld = 0;
-				$this->getKeyPos();
-				if ($this->keyPos !== null) {
-					$this->initChoice();
+				$keyPos = $this->getKeyPos();
+				if ($keyPos !== null) {
+					$this->initChoice($keyPos);
 				}
 			} else {
 				$this->searchUniqueSolution();
@@ -124,33 +120,33 @@ class Grid {
 	private function getKeyPos() {
 		$keyPos = null;
 		foreach ($this->pos as $key => $value) {
-			if (!in_array($key, $this->oldKeyPos)) {
-				if (count($value) == 2) {
+			if (count($value) == 2) {
+				$keyPos = $key;
+				break;
+			} else {
+				$this->countPos = count($value);
+				if ($this->countPos > 0 && $this->countPos < $this->countOld) {
 					$keyPos = $key;
-					break;
-				} else {
-					$this->countPos = count($value);
-					if ($this->countPos > 0 && $this->countPos < $this->countOld) {
-						$keyPos = $key;
-					}
 				}
-				$this->countOld = count($value);
 			}
+			$this->countOld = count($value);
+
 		}
 		$this->countChoicedValue++;
-		$this->keyPos = $keyPos;
+
+		return $keyPos;
 	}
 
-	private function initChoice() {
-		$this->oldKeyPos[] = $this->keyPos;
+	private function initChoice($keyPos) {
+		$this->oldKeyPos[] = $keyPos;
 		$this->oldSquares[] = $this->squares;
 		$this->oldColumns[] = $this->columns;
 		$this->oldLines[] = $this->lines;
 		$this->oldRes[] = $this->res;
-		$choice = $this->pos[$this->keyPos][0];
-		unset($this->pos[$this->keyPos][0]);
-		$this->oldPos[] = $this->pos[$this->keyPos];
-		$this->setChoice($this->keyPos, $choice);
+		$choice = $this->pos[$keyPos][0];
+		unset($this->pos[$keyPos][0]);
+		$this->oldPos[] = $this->pos[$keyPos];
+		$this->setChoice($keyPos, $choice);
 	}
 
 	private function returnPreviousChoice() {
@@ -176,7 +172,7 @@ class Grid {
 	}
 
 	private function searchUniqueSolution() {
-		$this->old = $this->res;
+		$this->previousRes = $this->res;
 		$this->pos = [];
 		$firstPos = strpos($this->res, '-');
 		$lastPos = strrpos($this->res, '-');
