@@ -174,16 +174,12 @@ class Grid {
 		$tabRef = range(1, 9);
 		$this->previousRes = $this->res;
 		$this->pos = [];
-		$firstPos = strpos($this->res, '-');
-		do {
-			$offsets[] = $firstPos;
-			$offset = $firstPos + 1;
-			$firstPos = strpos($this->res, '-', $offset);
-		} while ($firstPos !== false);
-		foreach ($offsets as $offsetCar) {
+		$offset = 0;
+		while (($offsetCar = strpos($this->res, '-', $offset)) !== false) {
+			$offset = $offsetCar + 1;
 			$this->pos[$offsetCar] = [];
 			$case = new GridCase($offsetCar);
-			$diff = array_diff($tabRef, $this->lines[$case->l], $this->squares[$case->s], $this->columns[$case->c]);
+			$diff = array_diff($tabRef, $this->lines[$case->getLine()], $this->squares[$case->getSquare()], $this->columns[$case->getColumn()]);
 			sort($diff);
 			$this->pos[$offsetCar] = $diff;
 			if (count($this->pos[$offsetCar]) == 1 && $this->pos[$offsetCar][0] !== null) {
@@ -208,9 +204,9 @@ class Grid {
 	}
 
 	private function setGridForUniqueChoices($case, $charInOffset) {
-		$this->squares[$case->s][MyFunctions::getPositionInSquare($case->l, $case->c)] =
-		$this->columns[$case->c][$case->l] =
-		$this->lines[$case->l][$case->c] = $charInOffset;
+		$this->squares[$case->getSquare()][MyFunctions::getPositionInSquare($case->getLine(), $case->getColumn())] =
+		$this->columns[$case->getColumn()][$case->getLine()] =
+		$this->lines[$case->getLine()][$case->getColumn()] = $charInOffset;
 	}
 
 	private function setResForUniqueChoice($offsetCar, $charInOffset) {

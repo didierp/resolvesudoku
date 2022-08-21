@@ -4,15 +4,15 @@ class GridCase {
 	/**
 	 * @var int
 	 */
-	public $l;
+	private $l;
 	/**
 	 * @var int
 	 */
-	public $c;
+	private $c;
 	/**
 	 * @var int
 	 */
-	public $s;
+	private $s;
 	/**
 	 * @var int
 	 */
@@ -26,5 +26,17 @@ class GridCase {
 		$this->l = MyFunctions::getLineFromOffset($offsetCar);
 		$this->c = MyFunctions::getColumnFromOffset($offsetCar);
 		$this->s = MyFunctions::getSquare($this->l, $this->c);
+	}
+
+	public function getLine(): int {
+		return $this->l;
+	}
+
+	public function getSquare(): int {
+		return $this->s;
+	}
+
+	public function getColumn(): int {
+		return $this->c;
 	}
 }
