@@ -72,10 +72,6 @@ class Grid {
 	/**
 	 * @var int
 	 */
-	private $countFoundValue = 0;
-	/**
-	 * @var int
-	 */
 	private $countChoicedValue = 0;
 
 	public function __construct($grid) {
@@ -107,7 +103,6 @@ class Grid {
 
 		echo "count: $this->count\n";
 		echo "countChoicedValue: $this->countChoicedValue\n";
-		echo "countFoundValue: $this->countFoundValue\n";
 		echo "countNoValue: $this->countNoValue\n";
 		echo "countUniqueValue: $this->countUniqueValue\n";
 		$fin = microtime();
@@ -217,11 +212,7 @@ class Grid {
 	}
 
 	private function setResForUniqueChoice($offsetCar, $charInOffset) {
-		if ($offsetCar == 0) {
-			$this->res = $charInOffset . substr($this->res, $offsetCar + 1);
-		} else {
-			$this->res = substr($this->res, 0, $offsetCar) . $charInOffset . substr($this->res, $offsetCar + 1);
-		}
+		$this->res = (($offsetCar == 0) ? '' : substr($this->res, 0, $offsetCar)) . $charInOffset . substr($this->res, $offsetCar + 1);
 	}
 
 	private function setChoice($lastKey, $oldPosIndexPosIndexPosKey) {
