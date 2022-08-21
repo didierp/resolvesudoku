@@ -2,7 +2,6 @@
 
 require_once(dirname(__FILE__) . "/Grid.php");
 
-
 class MyFonctions {
 
 	public static function displayGrid($res) {

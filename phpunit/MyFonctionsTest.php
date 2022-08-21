@@ -367,6 +367,7 @@ class MyFonctionsTest extends TestCase {
 		$res = MyFonctions::getSquares($grid);
 		$this->assertEquals("-", $res[$s][$posS]);
 	}
+
 	/**
 	 * @testWith
 	 *           ["---86---2-79-5-4--28-9--65-74-3--1-535--24-9---26-5--7--843-7--9--2--56-1-4--9-3-", "415863972679152483283947651746398125351724896892615347528436719937281564164579238"]

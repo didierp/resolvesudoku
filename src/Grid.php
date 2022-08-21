@@ -102,36 +102,7 @@ class Grid {
 				}
 			} else {
 				echo "old != res\n";
-				$this->old = $this->res;
-				$this->pos = [];
-				$firstPos = strpos($this->res, '-');
-				$lastPos = strrpos($this->res, '-');
-				for ($offsetCar = $firstPos; $offsetCar <= $lastPos; $offsetCar++) {
-					if (substr($this->res, $offsetCar, 1) == '-') {
-						$this->pos[$offsetCar] = [];
-						for ($val = 1; $val <= 9; $val++) {
-							$l = MyFonctions::getLineFromOffset($offsetCar);
-							if (!in_array($val, $this->lines[$l])) {
-								$c = MyFonctions::getColumnFromOffset($offsetCar);
-								$s = MyFonctions::getSquare($l, $c);
-								if (!in_array($val, $this->squares[$s])) {
-									if (!in_array($val, $this->columns[$c])) {
-										$this->pos[$offsetCar][] = $val;
-									}
-								}
-							}
-						}
-						if (count($this->pos[$offsetCar]) == 1 && $this->pos[$offsetCar][0] !== null) {
-							echo "unique value $offsetCar {$this->pos[$offsetCar][0]}\n";
-							$this->setUniqueChoice($offsetCar, $c, $l, $s);
-						} elseif (count($this->pos[$offsetCar]) == 0) {
-							echo "no value $offsetCar\n";
-							$this->returnPreviousChoice();
-							echo "break3\n";
-							break;
-						}
-					}
-				}
+				$this->searchUniqueSolution();
 			}
 			$this->count++;
 		}
@@ -169,6 +140,50 @@ class Grid {
 		echo "break1 $this->keyPos => {$this->pos[$this->keyPos][0]}\n";
 		unset($this->pos[$this->keyPos][0]);
 		$this->oldPos[] = $this->pos[$this->keyPos];
+		$this->setAChoice();
+	}
+
+	private function returnPreviousChoice() {
+		$this->pos = [];
+		// if faut revenir en arrière sur le dernier choix
+		$indexPos = count($this->oldPos) - 1;
+		if ($indexPos !== null && $indexPos >= 0) {
+			if (count($this->oldPos[$indexPos]) > 0) {
+				$this->oldPosIndexPosIndexPosKey = array_pop($this->oldPos[$indexPos]);
+				$lastKey = $this->oldKeyPos[$indexPos];
+				if ($lastKey !== null) {
+					$this->res = $this->oldRes[$indexPos];
+					$this->squares = $this->oldSquares[$indexPos];
+					$this->columns = $this->oldColumns[$indexPos];
+					$this->lines = $this->oldLines[$indexPos];
+					if (count($this->oldPos[$indexPos]) == 0) {
+						$this->popArray();
+					}
+					$this->setPreviousChoice($lastKey);
+					if (strlen($this->res) != 81) {
+						echo "too long3\n";
+					}
+				}
+			}
+		}
+	}
+
+	private function setUniqueChoice($offsetCar, $c, $l, $s) {
+		if ($offsetCar == 0) {
+			$this->res = $this->pos[$offsetCar][0] . substr($this->res, $offsetCar + 1);
+		} else {
+			$this->res = substr($this->res, 0, $offsetCar) . $this->pos[$offsetCar][0] . substr($this->res, $offsetCar + 1);
+		}
+		if (strlen($this->res) != 81) {
+			echo "too long2\n";
+		}
+		$this->posS = MyFonctions::getPositionInSquare($l, $c);
+		$this->squares[$s][$this->posS] = $this->pos[$offsetCar][0];
+		$this->columns[$c][$l] = $this->pos[$offsetCar][0];
+		$this->lines[$l][$c] = $this->pos[$offsetCar][0];
+	}
+
+	private function setAChoice() {
 		if ($this->keyPos === 0) {
 			$this->res = $this->choice . substr($this->res, $this->keyPos + 1);
 		} else {
@@ -186,62 +201,61 @@ class Grid {
 		$this->lines[$l][$c] = $this->choice;
 	}
 
-	private function returnPreviousChoice() {
+	private function searchUniqueSolution() {
+		$this->old = $this->res;
 		$this->pos = [];
-		// if faut revenir en arrière sur le dernier choix
-		$indexPos = count($this->oldPos) - 1;
-		if ($indexPos !== null && $indexPos >= 0) {
-			if (count($this->oldPos[$indexPos]) > 0) {
-				$this->oldPosIndexPosIndexPosKey = array_pop($this->oldPos[$indexPos]);
-				$lastKey = $this->oldKeyPos[$indexPos];
-				if ($lastKey !== null) {
-					$l = MyFonctions::getLineFromOffset($lastKey);
-					$c = MyFonctions::getColumnFromOffset($lastKey);
-					$s = MyFonctions::getSquare($l, $c);
-					$this->posS = MyFonctions::getPositionInSquare($l, $c);
-
-					$this->res = $this->oldRes[$indexPos];
-					$this->squares = $this->oldSquares[$indexPos];
-					$this->columns = $this->oldColumns[$indexPos];
-					$this->lines = $this->oldLines[$indexPos];
-					if (count($this->oldPos[$indexPos]) == 0) {
-						array_pop($this->oldPos);
-						array_pop($this->oldKeyPos);
-						array_pop($this->oldSquares);
-						array_pop($this->oldColumns);
-						array_pop($this->oldLines);
-						array_pop($this->oldRes);
+		$firstPos = strpos($this->res, '-');
+		$lastPos = strrpos($this->res, '-');
+		for ($offsetCar = $firstPos; $offsetCar <= $lastPos; $offsetCar++) {
+			if (substr($this->res, $offsetCar, 1) == '-') {
+				$this->pos[$offsetCar] = [];
+				for ($val = 1; $val <= 9; $val++) {
+					$l = MyFonctions::getLineFromOffset($offsetCar);
+					if (!in_array($val, $this->lines[$l])) {
+						$c = MyFonctions::getColumnFromOffset($offsetCar);
+						$s = MyFonctions::getSquare($l, $c);
+						if (!in_array($val, $this->squares[$s])) {
+							if (!in_array($val, $this->columns[$c])) {
+								$this->pos[$offsetCar][] = $val;
+							}
+						}
 					}
-					$this->squares[$s][$this->posS] = $this->oldPosIndexPosIndexPosKey;
-					$this->columns[$c][$l] = $this->oldPosIndexPosIndexPosKey;
-					$this->lines[$l][$c] = $this->oldPosIndexPosIndexPosKey;
-					echo "new value $lastKey $this->oldPosIndexPosIndexPosKey\n";
-					if ($lastKey == 0) {
-						$this->res = $this->oldPosIndexPosIndexPosKey . substr($this->res, $lastKey + 1);
-					} else {
-						$this->res = substr($this->res, 0, $lastKey) . $this->oldPosIndexPosIndexPosKey . substr($this->res, $lastKey + 1);
-					}
-					if (strlen($this->res) != 81) {
-						echo "too long3\n";
-					}
+				}
+				if (count($this->pos[$offsetCar]) == 1 && $this->pos[$offsetCar][0] !== null) {
+					echo "unique value $offsetCar {$this->pos[$offsetCar][0]}\n";
+					$this->setUniqueChoice($offsetCar, $c, $l, $s);
+				} elseif (count($this->pos[$offsetCar]) == 0) {
+					echo "no value $offsetCar\n";
+					$this->returnPreviousChoice();
+					echo "break3\n";
+					break;
 				}
 			}
 		}
 	}
 
-	private function setUniqueChoice($offsetCar, $c, $l ,$s) {
-		if ($offsetCar == 0) {
-			$this->res = $this->pos[$offsetCar][0] . substr($this->res, $offsetCar + 1);
-		} else {
-			$this->res = substr($this->res, 0, $offsetCar) . $this->pos[$offsetCar][0] . substr($this->res, $offsetCar + 1);
-		}
-		if (strlen($this->res) != 81) {
-			echo "too long2\n";
-		}
+	private function setPreviousChoice($lastKey) {
+		$l = MyFonctions::getLineFromOffset($lastKey);
+		$c = MyFonctions::getColumnFromOffset($lastKey);
+		$s = MyFonctions::getSquare($l, $c);
 		$this->posS = MyFonctions::getPositionInSquare($l, $c);
-		$this->squares[$s][$this->posS] = $this->pos[$offsetCar][0];
-		$this->columns[$c][$l] = $this->pos[$offsetCar][0];
-		$this->lines[$l][$c] = $this->pos[$offsetCar][0];
+		$this->squares[$s][$this->posS] = $this->oldPosIndexPosIndexPosKey;
+		$this->columns[$c][$l] = $this->oldPosIndexPosIndexPosKey;
+		$this->lines[$l][$c] = $this->oldPosIndexPosIndexPosKey;
+		echo "new value $lastKey $this->oldPosIndexPosIndexPosKey\n";
+		if ($lastKey == 0) {
+			$this->res = $this->oldPosIndexPosIndexPosKey . substr($this->res, $lastKey + 1);
+		} else {
+			$this->res = substr($this->res, 0, $lastKey) . $this->oldPosIndexPosIndexPosKey . substr($this->res, $lastKey + 1);
+		}
 	}
 
+	private function popArray() {
+		array_pop($this->oldPos);
+		array_pop($this->oldKeyPos);
+		array_pop($this->oldSquares);
+		array_pop($this->oldColumns);
+		array_pop($this->oldLines);
+		array_pop($this->oldRes);
+	}
 }
