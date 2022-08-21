@@ -70,10 +70,6 @@ class Grid {
 	 */
 	public $pos;
 	/**
-	 * @var int
-	 */
-	public $posS;
-	/**
 	 * @var int|null
 	 */
 	private $keyPos;
@@ -168,37 +164,12 @@ class Grid {
 		}
 	}
 
-	private function setUniqueChoice($offsetCar, $c, $l, $s) {
-		if ($offsetCar == 0) {
-			$this->res = $this->pos[$offsetCar][0] . substr($this->res, $offsetCar + 1);
-		} else {
-			$this->res = substr($this->res, 0, $offsetCar) . $this->pos[$offsetCar][0] . substr($this->res, $offsetCar + 1);
-		}
-		if (strlen($this->res) != 81) {
-			echo "too long2\n";
-		}
-		$this->posS = MyFonctions::getPositionInSquare($l, $c);
-		$this->squares[$s][$this->posS] = $this->pos[$offsetCar][0];
-		$this->columns[$c][$l] = $this->pos[$offsetCar][0];
-		$this->lines[$l][$c] = $this->pos[$offsetCar][0];
-	}
-
 	private function setAChoice() {
-		if ($this->keyPos === 0) {
-			$this->res = $this->choice . substr($this->res, $this->keyPos + 1);
-		} else {
-			$this->res = substr($this->res, 0, $this->keyPos) . $this->choice . substr($this->res, $this->keyPos + 1);
-		}
-		if (strlen($this->res) != 81) {
-			echo "too long1\n";
-		}
+		$this->setResForUniqueChoice($this->keyPos, $this->choice);
 		$l = MyFonctions::getLineFromOffset($this->keyPos);
 		$c = MyFonctions::getColumnFromOffset($this->keyPos);
 		$s = MyFonctions::getSquare($l, $c);
-		$this->posS = MyFonctions::getPositionInSquare($l, $c);
-		$this->squares[$s][$this->posS] = $this->choice;
-		$this->columns[$c][$l] = $this->choice;
-		$this->lines[$l][$c] = $this->choice;
+		$this->setGridForUniqueChoices($l, $c, $s, $this->choice);
 	}
 
 	private function searchUniqueSolution() {
@@ -223,7 +194,8 @@ class Grid {
 				}
 				if (count($this->pos[$offsetCar]) == 1 && $this->pos[$offsetCar][0] !== null) {
 					echo "unique value $offsetCar {$this->pos[$offsetCar][0]}\n";
-					$this->setUniqueChoice($offsetCar, $c, $l, $s);
+					$this->setResForUniqueChoice($offsetCar, $this->pos[$offsetCar][0]);
+					$this->setGridForUniqueChoices($l, $c, $s, $this->pos[$offsetCar][0]);
 				} elseif (count($this->pos[$offsetCar]) == 0) {
 					echo "no value $offsetCar\n";
 					$this->returnPreviousChoice();
@@ -238,16 +210,9 @@ class Grid {
 		$l = MyFonctions::getLineFromOffset($lastKey);
 		$c = MyFonctions::getColumnFromOffset($lastKey);
 		$s = MyFonctions::getSquare($l, $c);
-		$this->posS = MyFonctions::getPositionInSquare($l, $c);
-		$this->squares[$s][$this->posS] = $this->oldPosIndexPosIndexPosKey;
-		$this->columns[$c][$l] = $this->oldPosIndexPosIndexPosKey;
-		$this->lines[$l][$c] = $this->oldPosIndexPosIndexPosKey;
+		$this->setGridForUniqueChoices($l, $c, $s, $this->oldPosIndexPosIndexPosKey);
 		echo "new value $lastKey $this->oldPosIndexPosIndexPosKey\n";
-		if ($lastKey == 0) {
-			$this->res = $this->oldPosIndexPosIndexPosKey . substr($this->res, $lastKey + 1);
-		} else {
-			$this->res = substr($this->res, 0, $lastKey) . $this->oldPosIndexPosIndexPosKey . substr($this->res, $lastKey + 1);
-		}
+		$this->setResForUniqueChoice($lastKey, $this->oldPosIndexPosIndexPosKey);
 	}
 
 	private function popArray() {
@@ -257,5 +222,19 @@ class Grid {
 		array_pop($this->oldColumns);
 		array_pop($this->oldLines);
 		array_pop($this->oldRes);
+	}
+
+	private function setGridForUniqueChoices($l, $c, $s, $charInOffset) {
+		$this->squares[$s][MyFonctions::getPositionInSquare($l, $c)] = $charInOffset;
+		$this->columns[$c][$l] = $charInOffset;
+		$this->lines[$l][$c] = $charInOffset;
+	}
+
+	private function setResForUniqueChoice($offsetCar, $charInOffset) {
+		if ($offsetCar == 0) {
+			$this->res = $charInOffset . substr($this->res, $offsetCar + 1);
+		} else {
+			$this->res = substr($this->res, 0, $offsetCar) . $charInOffset . substr($this->res, $offsetCar + 1);
+		}
 	}
 }
