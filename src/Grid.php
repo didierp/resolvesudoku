@@ -46,10 +46,6 @@ class Grid {
 	 */
 	public $oldKeyPos = [];
 	/**
-	 * @var int|null
-	 */
-	public $oldPosIndexPosIndexPosKey = null;
-	/**
 	 * @var int
 	 */
 	public $count = 0;
@@ -57,10 +53,6 @@ class Grid {
 	 * @var int
 	 */
 	public $countPos;
-	/**
-	 * @var int|null
-	 */
-	public $choice;
 	/**
 	 * @var int
 	 */
@@ -155,10 +147,10 @@ class Grid {
 		$this->oldColumns[] = $this->columns;
 		$this->oldLines[] = $this->lines;
 		$this->oldRes[] = $this->res;
-		$this->choice = $this->pos[$this->keyPos][0];
+		$choice = $this->pos[$this->keyPos][0];
 		unset($this->pos[$this->keyPos][0]);
 		$this->oldPos[] = $this->pos[$this->keyPos];
-		$this->setChoice($this->keyPos, $this->choice);
+		$this->setChoice($this->keyPos, $choice);
 	}
 
 	private function returnPreviousChoice() {
@@ -167,7 +159,7 @@ class Grid {
 		$indexPos = count($this->oldPos) - 1;
 		if ($indexPos !== null && $indexPos >= 0) {
 			if (count($this->oldPos[$indexPos]) > 0) {
-				$this->oldPosIndexPosIndexPosKey = array_pop($this->oldPos[$indexPos]);
+				$oldPosIndexPosIndexPosKey = array_pop($this->oldPos[$indexPos]);
 				$lastKey = $this->oldKeyPos[$indexPos];
 				if ($lastKey !== null) {
 					$this->res = $this->oldRes[$indexPos];
@@ -177,7 +169,7 @@ class Grid {
 					if (count($this->oldPos[$indexPos]) == 0) {
 						$this->popArray();
 					}
-					$this->setChoice($lastKey, $this->oldPosIndexPosIndexPosKey);
+					$this->setChoice($lastKey, $oldPosIndexPosIndexPosKey);
 				}
 			}
 		}
