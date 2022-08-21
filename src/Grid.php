@@ -155,7 +155,7 @@ class Grid {
 		$indexPos = count($this->oldPos) - 1;
 		if ($indexPos !== null && $indexPos >= 0) {
 			if (count($this->oldPos[$indexPos]) > 0) {
-				$oldPosIndexPosIndexPosKey = array_pop($this->oldPos[$indexPos]);
+				$oldPosIndexPosKey = array_pop($this->oldPos[$indexPos]);
 				$lastKey = $this->oldKeyPos[$indexPos];
 				if ($lastKey !== null) {
 					$this->res = $this->oldRes[$indexPos];
@@ -165,7 +165,7 @@ class Grid {
 					if (count($this->oldPos[$indexPos]) == 0) {
 						$this->popArray();
 					}
-					$this->setChoice($lastKey, $oldPosIndexPosIndexPosKey);
+					$this->setChoice($lastKey, $oldPosIndexPosKey);
 				}
 			}
 		}
