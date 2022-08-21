@@ -1,5 +1,7 @@
 <?php
 
+require_once(dirname(__FILE__) . "/GridCase.php");
+
 class Grid {
 	/**
 	 * @var string
@@ -74,7 +76,10 @@ class Grid {
 	 */
 	private $countChoicedValue = 0;
 
-	public function __construct($grid) {
+	/**
+	 * @param string $grid
+	 */
+	public function __construct(string $grid) {
 		$this->res = $grid;
 		$this->squares = MyFunctions::getSquares($this->res);
 		$this->columns = MyFunctions::getColumns($this->res);
@@ -178,16 +183,14 @@ class Grid {
 		} while ($firstPos !== false);
 		foreach ($offsets as $offsetCar) {
 			$this->pos[$offsetCar] = [];
-			$l = MyFunctions::getLineFromOffset($offsetCar);
-			$c = MyFunctions::getColumnFromOffset($offsetCar);
-			$s = MyFunctions::getSquare($l, $c);
-			$diff = array_diff($tabRef, $this->lines[$l], $this->squares[$s], $this->columns[$c]);
+			$case = new GridCase($offsetCar);
+			$diff = array_diff($tabRef, $this->lines[$case->l], $this->squares[$case->s], $this->columns[$case->c]);
 			sort($diff);
 			$this->pos[$offsetCar] = $diff;
 			if (count($this->pos[$offsetCar]) == 1 && $this->pos[$offsetCar][0] !== null) {
 				$this->countUniqueValue++;
 				$this->setResForUniqueChoice($offsetCar, $this->pos[$offsetCar][0]);
-				$this->setGridForUniqueChoices($l, $c, $s, $this->pos[$offsetCar][0]);
+				$this->setGridForUniqueChoices($case, $this->pos[$offsetCar][0]);
 			} elseif (count($this->pos[$offsetCar]) == 0) {
 				$this->countNoValue++;
 				$this->returnPreviousChoice();
@@ -205,10 +208,10 @@ class Grid {
 		array_pop($this->oldRes);
 	}
 
-	private function setGridForUniqueChoices($l, $c, $s, $charInOffset) {
-		$this->squares[$s][MyFunctions::getPositionInSquare($l, $c)] = $charInOffset;
-		$this->columns[$c][$l] = $charInOffset;
-		$this->lines[$l][$c] = $charInOffset;
+	private function setGridForUniqueChoices($case, $charInOffset) {
+		$this->squares[$case->s][MyFunctions::getPositionInSquare($case->l, $case->c)] = $charInOffset;
+		$this->columns[$case->c][$case->l] = $charInOffset;
+		$this->lines[$case->l][$case->c] = $charInOffset;
 	}
 
 	private function setResForUniqueChoice($offsetCar, $charInOffset) {
@@ -216,10 +219,8 @@ class Grid {
 	}
 
 	private function setChoice($lastKey, $oldPosIndexPosIndexPosKey) {
-		$l = MyFunctions::getLineFromOffset($lastKey);
-		$c = MyFunctions::getColumnFromOffset($lastKey);
-		$s = MyFunctions::getSquare($l, $c);
-		$this->setGridForUniqueChoices($l, $c, $s, $oldPosIndexPosIndexPosKey);
+		$case = new GridCase($lastKey);
+		$this->setGridForUniqueChoices($case, $oldPosIndexPosIndexPosKey);
 		$this->setResForUniqueChoice($lastKey, $oldPosIndexPosIndexPosKey);
 	}
 }
