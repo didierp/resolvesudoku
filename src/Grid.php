@@ -214,8 +214,7 @@ class Grid {
 	}
 
 	private function setChoice($lastKey, $oldPosIndexPosIndexPosKey) {
-		$case = new GridCase($lastKey);
-		$this->setGridForUniqueChoices($case, $oldPosIndexPosIndexPosKey);
+		$this->setGridForUniqueChoices(new GridCase($lastKey), $oldPosIndexPosIndexPosKey);
 		$this->setResForUniqueChoice($lastKey, $oldPosIndexPosIndexPosKey);
 	}
 }
