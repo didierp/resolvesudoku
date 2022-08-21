@@ -130,7 +130,6 @@ class Grid {
 				}
 			}
 			$this->countOld = count($value);
-
 		}
 		$this->countChoicedValue++;
 
@@ -209,8 +208,8 @@ class Grid {
 	}
 
 	private function setGridForUniqueChoices($case, $charInOffset) {
-		$this->squares[$case->s][MyFunctions::getPositionInSquare($case->l, $case->c)] = $charInOffset;
-		$this->columns[$case->c][$case->l] = $charInOffset;
+		$this->squares[$case->s][MyFunctions::getPositionInSquare($case->l, $case->c)] =
+		$this->columns[$case->c][$case->l] =
 		$this->lines[$case->l][$case->c] = $charInOffset;
 	}
 
