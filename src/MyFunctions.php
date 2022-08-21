@@ -2,7 +2,7 @@
 
 require_once(dirname(__FILE__) . "/Grid.php");
 
-class MyFonctions {
+class MyFunctions {
 
 	public static function displayGrid($res) {
 

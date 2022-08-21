@@ -2,13 +2,13 @@
 
 use PHPUnit\Framework\TestCase;
 
-class MyFonctionsTest extends TestCase {
+class MyFunctionsTest extends TestCase {
 
 	public static function setUpBeforeClass() {
 	}
 
 	public function setUp() {
-		require_once(dirname(__FILE__) . "/../src/MyFonctions.php");
+		require_once(dirname(__FILE__) . "/../src/MyFunctions.php");
 		require_once(dirname(__FILE__) . "/../src/Grid.php");
 		parent::setUp();
 	}
@@ -98,7 +98,7 @@ class MyFonctionsTest extends TestCase {
 	 *           [8, 8, 8]
 	 */
 	public function testGetSquare($l, $c, $s) {
-		$this->assertEquals($s, MyFonctions::getSquare($l, $c));
+		$this->assertEquals($s, MyFunctions::getSquare($l, $c));
 	}
 
 	/**
@@ -186,7 +186,7 @@ class MyFonctionsTest extends TestCase {
 	 *           [8, 8, "11111111111111111111111111111111111111111111111111111111111111111111111111111111-"]
 	 */
 	public function testGetLines($l, $c, $grid) {
-		$res = MyFonctions::getLines($grid);
+		$res = MyFunctions::getLines($grid);
 		$this->assertEquals("-", $res[$l][$c]);
 	}
 
@@ -275,7 +275,7 @@ class MyFonctionsTest extends TestCase {
 	 *           [8, 8, "11111111111111111111111111111111111111111111111111111111111111111111111111111111-"]
 	 */
 	public function testGetColumns($l, $c, $grid) {
-		$res = MyFonctions::getColumns($grid);
+		$res = MyFunctions::getColumns($grid);
 		$this->assertEquals("-", $res[$c][$l]);
 	}
 
@@ -364,7 +364,7 @@ class MyFonctionsTest extends TestCase {
 	 *           [8, 8, "11111111111111111111111111111111111111111111111111111111111111111111111111111111-"]
 	 */
 	public function testGetSquares($s, $posS, $grid) {
-		$res = MyFonctions::getSquares($grid);
+		$res = MyFunctions::getSquares($grid);
 		$this->assertEquals("-", $res[$s][$posS]);
 	}
 

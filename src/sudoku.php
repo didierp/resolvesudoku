@@ -13,9 +13,9 @@ if (count($_REQUEST) == 81) {
 if ($valid) {
 //	$grid = $argv[1];
 	$grid = '---86---2-79-5-4--28-9--65-74-3--1-535--24-9---26-5--7--843-7--9--2--56-1-4--9-3-';
-	$res = MyFonctions::getRes($grid);
+	$res = MyFunctions::getRes($grid);
 
-	MyFonctions::displayGrid($res);
+	MyFunctions::displayGrid($res);
 } else {
 	?>
 	<form name="sudokuform" method="post" action="sudoku.php">
