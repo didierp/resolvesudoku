@@ -65,4 +65,8 @@ class MyFunctions {
 		return (($line % 3) * 3) + ($column % 3);
 	}
 
+	public static function cleanGrid(string $grid): string {
+		return str_pad(preg_replace('/[^1-9]/', '-', $grid), 81, '-');
+	}
+
 }

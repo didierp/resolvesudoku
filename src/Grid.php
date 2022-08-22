@@ -83,7 +83,7 @@ class Grid {
 	 * @param string $grid
 	 */
 	public function __construct(string $grid) {
-		$this->res = $grid;
+		$this->res = MyFunctions::cleanGrid($grid);
 		$this->squares = MyFunctions::getSquares($this->res);
 		$this->columns = MyFunctions::getColumns($this->res);
 		$this->lines = MyFunctions::getLines($this->res);
