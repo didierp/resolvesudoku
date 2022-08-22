@@ -3,6 +3,9 @@
 require_once(dirname(__FILE__) . "/GridCase.php");
 
 class Grid {
+
+	const EMPTY_CELL_CHARACTER = '-';
+	const MAX_LOOP = 1000;
 	/**
 	 * @var string
 	 */
@@ -88,8 +91,8 @@ class Grid {
 
 	public function computeGrid() {
 		$debut = microtime();
-		while (strpos($this->res, '-') !== false) {
-			if ($this->count >= 1000) {
+		while (strpos($this->res, self::EMPTY_CELL_CHARACTER) !== false) {
+			if ($this->count >= self::MAX_LOOP) {
 				echo "1000loops\n";
 				break;
 			}
@@ -176,7 +179,7 @@ class Grid {
 		$this->previousRes = $this->res;
 		$this->pos = [];
 		$offset = 0;
-		while (($offsetCar = strpos($this->res, '-', $offset)) !== false) {
+		while (($offsetCar = strpos($this->res, self::EMPTY_CELL_CHARACTER, $offset)) !== false) {
 			$offset = $offsetCar + 1;
 			$this->pos[$offsetCar] = [];
 			$case = new GridCase($offsetCar);

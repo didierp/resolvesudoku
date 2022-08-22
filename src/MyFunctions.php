@@ -4,32 +4,6 @@ require_once(dirname(__FILE__) . "/Grid.php");
 
 class MyFunctions {
 
-	public static function displayGrid(string $res) {
-
-		?>
-		<table>
-			<tr>
-				<?php
-				for ($i = 0;
-				$i < 81;
-				$i++) {
-				if ($i % 9 == 0) {
-				?></tr>
-			<tr><?php
-				}
-				?>
-				<td><input type="text" id="0_0" name="0_0" value="<?php echo substr($res, $i, 1) ?>"/></td><?php
-				} ?>
-			</tr>
-		</table>
-		<div>
-			<input type="submit">
-		</div>
-		</form>
-
-		<?php
-	}
-
 	public static function getLines(string $grid): array {
 		$lines = [];
 		$offset = 0;
