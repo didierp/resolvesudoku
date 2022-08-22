@@ -4,39 +4,39 @@ class GridCase {
 	/**
 	 * @var int
 	 */
-	private $l;
+	private $line;
 	/**
 	 * @var int
 	 */
-	private $c;
+	private $column;
 	/**
 	 * @var int
 	 */
-	private $s;
+	private $square;
 	/**
 	 * @var int
 	 */
-	private $offsetCar;
+	private $offset;
 
 	/**
-	 * @param int $offsetCar
+	 * @param int $offset
 	 */
-	public function __construct(int $offsetCar) {
-		$this->offsetCar = $offsetCar;
-		$this->l = MyFunctions::getLineFromOffset($offsetCar);
-		$this->c = MyFunctions::getColumnFromOffset($offsetCar);
-		$this->s = MyFunctions::getSquare($this->l, $this->c);
+	public function __construct(int $offset) {
+		$this->offset = $offset;
+		$this->line = MyFunctions::getLineFromOffset($this->offset);
+		$this->column = MyFunctions::getColumnFromOffset($this->offset);
+		$this->square = MyFunctions::getSquare($this->line, $this->column);
 	}
 
 	public function getLine(): int {
-		return $this->l;
+		return $this->line;
 	}
 
 	public function getSquare(): int {
-		return $this->s;
+		return $this->square;
 	}
 
 	public function getColumn(): int {
-		return $this->c;
+		return $this->column;
 	}
 }

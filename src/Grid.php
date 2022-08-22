@@ -86,7 +86,7 @@ class Grid {
 		$this->lines = MyFunctions::getLines($this->res);
 	}
 
-	public function getRes(): string {
+	public function computeGrid() {
 		$debut = microtime();
 		while (strpos($this->res, '-') !== false) {
 			if ($this->count >= 1000) {
@@ -113,10 +113,11 @@ class Grid {
 		$fin = microtime();
 		$delay = $fin - $debut;
 		echo "delay: $delay\n";
-
-		return $this->res;
 	}
 
+	/**
+	 * @return int|null
+	 */
 	private function getBestOffset() {
 		$bestOffset = null;
 		foreach ($this->pos as $offset => $value) {
@@ -136,7 +137,7 @@ class Grid {
 		return $bestOffset;
 	}
 
-	private function initChoice($keyPos) {
+	private function initChoice(int $keyPos) {
 		$this->oldKeyPos[] = $keyPos;
 		$this->oldSquares[] = $this->squares;
 		$this->oldColumns[] = $this->columns;
@@ -203,17 +204,17 @@ class Grid {
 		array_pop($this->oldRes);
 	}
 
-	private function setGridForUniqueChoices($case, $charInOffset) {
+	private function setGridForUniqueChoices(GridCase $case, string $charInOffset) {
 		$this->squares[$case->getSquare()][MyFunctions::getPositionInSquare($case->getLine(), $case->getColumn())] =
 		$this->columns[$case->getColumn()][$case->getLine()] =
 		$this->lines[$case->getLine()][$case->getColumn()] = $charInOffset;
 	}
 
-	private function setResForUniqueChoice($offsetCar, $charInOffset) {
+	private function setResForUniqueChoice(int $offsetCar, string $charInOffset) {
 		$this->res = (($offsetCar == 0) ? '' : substr($this->res, 0, $offsetCar)) . $charInOffset . substr($this->res, $offsetCar + 1);
 	}
 
-	private function setChoice($lastKey, $oldPosIndexPosIndexPosKey) {
+	private function setChoice(int $lastKey, string $oldPosIndexPosIndexPosKey) {
 		$this->setGridForUniqueChoices(new GridCase($lastKey), $oldPosIndexPosIndexPosKey);
 		$this->setResForUniqueChoice($lastKey, $oldPosIndexPosIndexPosKey);
 	}

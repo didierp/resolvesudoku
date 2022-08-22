@@ -4,7 +4,7 @@ require_once(dirname(__FILE__) . "/Grid.php");
 
 class MyFunctions {
 
-	public static function displayGrid($res) {
+	public static function displayGrid(string $res) {
 
 		?>
 		<table>
@@ -30,7 +30,7 @@ class MyFunctions {
 		<?php
 	}
 
-	public static function getLines($grid): array {
+	public static function getLines(string $grid): array {
 		$lines = [];
 		$offset = 0;
 		for ($i = 0; $i < 9; $i++) {
@@ -43,7 +43,7 @@ class MyFunctions {
 		return $lines;
 	}
 
-	public static function getColumns($grid): array {
+	public static function getColumns(string $grid): array {
 		$columns = [];
 		for ($i = 0; $i < 9; $i++) {
 			$offset = $i;
@@ -56,7 +56,7 @@ class MyFunctions {
 		return $columns;
 	}
 
-	public static function getSquares($grid): array {
+	public static function getSquares(string $grid): array {
 		$squares = [];
 		for ($i = 0; $i < 9; $i++) {
 			$offset = 27 * (int)($i / 3) + (($i - (3 * (int)($i / 3))) * 3);
@@ -71,24 +71,24 @@ class MyFunctions {
 		return $squares;
 	}
 
-	public static function getLineFromOffset(int $offsetCar): int {
-		return (int)($offsetCar / 9);
+	public static function getLineFromOffset(int $offset): int {
+		return (int)($offset / 9);
 	}
 
-	public static function getColumnFromOffset(int $offsetCar): int {
-		return $offsetCar % 9;
+	public static function getColumnFromOffset(int $offset): int {
+		return $offset % 9;
 	}
 
-	public static function getSquare($l, $c): int {
-		return 3 * ((int)($l / 3)) + (int)($c / 3);
+	public static function getSquare(int $line, int $column): int {
+		return 3 * ((int)($line / 3)) + (int)($column / 3);
 	}
 
-	public static function getSquareFromOffset(int $offsetCar): int {
-		return 3 * ((int)((int)($offsetCar / 9) / 3)) + (int)($offsetCar % 9 / 3);
+	public static function getSquareFromOffset(int $offset): int {
+		return 3 * ((int)((int)($offset / 9) / 3)) + (int)($offset % 9 / 3);
 	}
 
-	public static function getPositionInSquare($l, $c): int {
-		return (($l % 3) * 3) + ($c % 3);
+	public static function getPositionInSquare(int $line, int $column): int {
+		return (($line % 3) * 3) + ($column % 3);
 	}
 
 }
