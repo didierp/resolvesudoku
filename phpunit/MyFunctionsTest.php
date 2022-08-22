@@ -97,8 +97,8 @@ class MyFunctionsTest extends TestCase {
 	 *           [79, 8]
 	 *           [80, 8]
 	 */
-	public function testGetSquareFromOffset($offset, $s) {
-		$this->assertEquals($s, MyFunctions::getSquareFromOffset($offset), "$offset, $s");
+	public function testGetSquareFromOffset($offset, $square) {
+		$this->assertEquals($square, MyFunctions::getSquareFromOffset($offset), "$offset, $square");
 	}
 
 	/**
@@ -185,8 +185,8 @@ class MyFunctionsTest extends TestCase {
 	 *           [8, 7, 8]
 	 *           [8, 8, 8]
 	 */
-	public function testGetSquare($l, $c, $s) {
-		$this->assertEquals($s, MyFunctions::getSquare($l, $c));
+	public function testGetSquare($line, $column, $square) {
+		$this->assertEquals($square, MyFunctions::getSquare($line, $column), "$line, $column, $square");
 	}
 
 	/**
@@ -273,9 +273,9 @@ class MyFunctionsTest extends TestCase {
 	 *           [8, 7, "1111111111111111111111111111111111111111111111111111111111111111111111111111111-1"]
 	 *           [8, 8, "11111111111111111111111111111111111111111111111111111111111111111111111111111111-"]
 	 */
-	public function testGetLines($l, $c, $grid) {
+	public function testGetLines($line, $column, $grid) {
 		$res = MyFunctions::getLines($grid);
-		$this->assertEquals("-", $res[$l][$c]);
+		$this->assertEquals("-", $res[$line][$column], "$line, $column, $grid");
 	}
 
 	/**
@@ -362,9 +362,9 @@ class MyFunctionsTest extends TestCase {
 	 *           [8, 7, "1111111111111111111111111111111111111111111111111111111111111111111111111111111-1"]
 	 *           [8, 8, "11111111111111111111111111111111111111111111111111111111111111111111111111111111-"]
 	 */
-	public function testGetColumns($l, $c, $grid) {
+	public function testGetColumns($line, $column, $grid) {
 		$res = MyFunctions::getColumns($grid);
-		$this->assertEquals("-", $res[$c][$l]);
+		$this->assertEquals("-", $res[$column][$line], "$line, $column, $grid");
 	}
 
 	/**
@@ -451,9 +451,9 @@ class MyFunctionsTest extends TestCase {
 	 *           [8, 7, "1111111111111111111111111111111111111111111111111111111111111111111111111111111-1"]
 	 *           [8, 8, "11111111111111111111111111111111111111111111111111111111111111111111111111111111-"]
 	 */
-	public function testGetSquares($s, $posS, $grid) {
+	public function testGetSquares($square, $posS, $grid) {
 		$res = MyFunctions::getSquares($grid);
-		$this->assertEquals("-", $res[$s][$posS]);
+		$this->assertEquals("-", $res[$square][$posS], "$square, $posS, $grid");
 	}
 
 	/**
@@ -469,6 +469,6 @@ class MyFunctionsTest extends TestCase {
 	public function testGetRes($grid, $expectedRes) {
 		$my = new Grid($grid);
 		$my->computeGrid();
-		$this->assertEquals($expectedRes, $my->res);
+		$this->assertEquals($expectedRes, $my->res, "$grid, $expectedRes");
 	}
 }
